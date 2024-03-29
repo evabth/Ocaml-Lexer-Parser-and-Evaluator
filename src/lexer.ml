@@ -17,24 +17,24 @@ let tokenize input =
   let re_less_equal = Str.regexp "<=" in 
   let re_or = Str.regexp "||" in
   let re_and = Str.regexp "&&" in
-  let re_not = Str.regexp "not\\([ \t\n]\\|$\\)" in
-  let re_if = Str.regexp "if\\([ \t\n]\\|$\\)" in 
-  let re_then = Str.regexp "then\\([ \t\n]\\|$\\)" in 
-  let re_else = Str.regexp "else\\([ \t\n]\\|$\\)" in 
+  let re_not = Str.regexp "not\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in
+  let re_if = Str.regexp "if\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in 
+  let re_then = Str.regexp "then\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in 
+  let re_else = Str.regexp "else\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in 
   let re_add = Str.regexp "\\+" in
   let re_sub = Str.regexp "-" in 
   let re_mult = Str.regexp "\\*" in 
   let re_div = Str.regexp "/" in 
   let re_concat = Str.regexp "\\^" in 
-  let re_let = Str.regexp "let\\([ \t\n]\\|$\\)" in 
-  let re_rec = Str.regexp "rec\\([ \t\n]\\|$\\)" in 
-  let re_in = Str.regexp "in\\([ \t\n]\\|$\\)" in 
-  let re_def = Str.regexp "def\\([ \t\n]\\|$\\)" in 
-  let re_fun = Str.regexp "fun\\([ \t\n]\\|$\\)" in
+  let re_let = Str.regexp "let\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in 
+  let re_rec = Str.regexp "rec\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in 
+  let re_in = Str.regexp "in\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in 
+  let re_def = Str.regexp "def\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in 
+  let re_fun = Str.regexp "fun\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in
   let re_arrow = Str.regexp "->" in 
   let re_pos_int = Str.regexp "[0-9]+" in
   let re_neg_int = Str.regexp "(\\(-[0-9]+\\))" in
-  let re_bool = Str.regexp "\\(true\\|false\\)\\([ \t\n]\\|$\\)" in 
+  let re_bool = Str.regexp "\\(true\\|false\\)\\([^\\(a-zA-Z0-9\\)]\\|$\\)" in 
   let re_string = Str.regexp "\"\\([^\"]*\\)\"" in 
   let re_id = Str.regexp "[a-zA-Z][a-zA-Z0-9]*" in
   let re_doublesemi = Str.regexp ";;" in 
@@ -145,7 +145,7 @@ let tokenize input =
 
     else if (Str.string_match re_bool input pos ) then 
       let token = bool_of_string (Str.matched_group 1 input) in
-      (Tok_Bool token) :: tok (Str.match_end ())
+      (Tok_Bool token) :: tok (pos + 4)
 
     else if (Str.string_match re_string input pos) then 
       let token = (Str.matched_group 1 input) in 
