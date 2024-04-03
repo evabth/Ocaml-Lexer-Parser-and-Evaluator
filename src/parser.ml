@@ -246,4 +246,17 @@ let rec parse_expr toks =
 
 (* Part 3: Parsing mutop *)
 
-let rec parse_mutop toks = failwith "unimplemented"
+let rec parse_mutop toks = 
+  match lookahead toks with
+  | Some(Tok_Def) -> let toks1 = (match_token toks Tok_Def) in 
+    (match lookahead toks1 with
+    | Some(Tok_ID id) -> 
+      let (toks2, expr2) = parse_expr (match_token (match_token toks1 (Tok_ID id)) Tok_Equal) in 
+      (match_token toks2 Tok_DoubleSemi, Def (id, expr2))
+    | Some(_) -> raise (InvalidInputException "no id")
+    | None -> raise (InvalidInputException "no id") )
+
+  |Some(Tok_DoubleSemi) ->  (match_token toks Tok_DoubleSemi, NoOp)
+  |Some(_) -> let (toks1, expr1) = parse_expr toks in 
+    (match_token toks1 Tok_DoubleSemi, Expr(expr1))
+  |None -> raise (InvalidInputException "No input")
