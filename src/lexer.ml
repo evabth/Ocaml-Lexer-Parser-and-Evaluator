@@ -145,7 +145,7 @@ let tokenize input =
 
     else if (Str.string_match re_bool input pos ) then 
       let token = bool_of_string (Str.matched_group 1 input) in
-      (Tok_Bool token) :: tok (pos + 4)
+      (Tok_Bool token) :: tok (Str.match_end ())
 
     else if (Str.string_match re_string input pos) then 
       let token = (Str.matched_group 1 input) in 
