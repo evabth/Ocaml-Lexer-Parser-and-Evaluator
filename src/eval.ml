@@ -98,10 +98,12 @@ let rec eval_expr env e =
       eval_expr (extend fun_env fun_var arg) fun_expr
     | _ -> raise (TypeError "not a function") )
 
-  | Let (var, boolean, expr1, expr2) -> 
-    if boolean then 
-      failwith "hard part to code"(* recursive case*) (*i dont know what to write here*)
-    else let env1 = extend env var (eval_expr env expr1) in 
+  | Let (var, boolean, expr1, expr2) ->  
+    if boolean then  (*recursive calls are going to kill me*)
+      let env1 = extend_tmp env var in 
+      let env2 = update env1 var (eval_expr env1 expr1) in  
+      (eval_expr env1 expr2) 
+    else let env1 = extend env var (eval_expr env expr1 ) in 
     (eval_expr env1 expr2)
   | Closure (env, var, expr) -> Closure (env, var, expr)
   | Record list -> Record (list)
@@ -120,5 +122,5 @@ let eval_mutop env m =
   match m with 
   |Def (var,expr) -> let eval = (eval_expr env expr) in 
     (extend env var eval, Some(eval))
-  |Expr (expr)-> (env,Some(eval_expr env expr) )(*this is probably dumb and wont work*)
+  |Expr (expr)-> (env,Some(eval_expr env expr) )(*this is probably dumb and wont work, might wanna look at the enviroment *)
   |NoOp -> (env,None)
