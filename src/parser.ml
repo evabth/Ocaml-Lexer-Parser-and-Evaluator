@@ -106,7 +106,7 @@ let rec parse_expr toks =
     | Some(Tok_Not) ->  let (toks1, expr1) = parse_unary (match_token toks Tok_Not) in 
       (toks1, Not(expr1))
     | Some(_) -> parse_app toks 
-    | None -> raise (InvalidInputException "parse_unary failed") in 
+    | None -> raise (InvalidInputException "parse_unary failed") in  (*this could be an issue please check if "" or the empty string is a valid expression and what error it should have*)
     
 
 
@@ -248,6 +248,7 @@ let rec parse_expr toks =
 
 let rec parse_mutop toks = 
   match lookahead toks with
+  | Some(Tok_DoubleSemi) -> (match_token toks Tok_DoubleSemi, NoOp )
   | Some(Tok_Def) -> let toks1 = (match_token toks Tok_Def) in 
     (match lookahead toks1 with
     | Some(Tok_ID id) -> 
